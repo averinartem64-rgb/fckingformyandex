@@ -23,44 +23,75 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* === КРУГЛАЯ КНОПКА-ТУМБЛЕР === */
+        .toggle-circle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+
+        /* Состояние ON (зеленый) */
+        .toggle-circle.on {
+            background-color: #1db954;
+            box-shadow: 0 0 8px rgba(29, 185, 84, 0.6);
+        }
+
+        /* Состояние OFF (красный) */
+        .toggle-circle.off {
+            background-color: #e53935;
+            box-shadow: 0 0 8px rgba(229, 57, 53, 0.6);
+        }
+
         /* Контейнер формы */
         .form-container {
             width: 500px; 
-            position: relative; /* Важно: относительно этого блока позиционируется плашка */
+            position: relative; 
         }
 
         /* === ЗЕЛЕНАЯ ПЛАШКА === */
-.toast-notification {
-    position: absolute;
-    top: -34px; 
-    left: 85px; 
-    background-color: #1db954; 
-    color: #ffffff;
-    
-    /* ФИКСИРУЕМ РАЗМЕР ОКНА */
-    height: 67px;           /* Фиксированная высота (подберите под ваш padding 20px + текст) */
-    padding: 0 13px 0 17px;        /* Убрали верхний/нижний паддинг, оставили боковой */
-    box-sizing: border-box; /* Чтобы padding не увеличивал общую высоту */
-    
-    border-radius: 15px;
-    font-size: 18px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;    /* Центрируем контент по вертикали */
-    justify-content: center; /* Центрируем по горизонтали (если нужно) */
-    gap: 8px;
-    z-index: 10; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    white-space: nowrap;
-    overflow: hidden;       /* Обрезаем всё, что вылезет за пределы */
-}
+        .toast-notification {
+            position: absolute;
+            top: -34px; 
+            left: 85px; 
+            background-color: #1db954; 
+            color: #ffffff;
+            height: 67px;           
+            padding: 0 13px 0 17px;        
+            box-sizing: border-box; 
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;    
+            justify-content: center; 
+            gap: 8px;
+            z-index: 10; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            overflow: hidden;       
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
 
-.toast-notification svg {
-    width: 30px;
-    height: 30px;
-    fill: white;
-    flex-shrink: 0;         /* Запрещаем галочке сжиматься */
-}
+        /* Класс для скрытия плашки */
+        .toast-notification.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .toast-notification svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+            flex-shrink: 0;         
+        }
 
         /* Заголовок */
         .title {
@@ -159,10 +190,13 @@
 </head>
 <body>
 
+<!-- Круглая кнопка-переключатель -->
+<button class="toggle-circle on" id="toggleBtn" onclick="toggleToast()"></button>
+
 <div class="form-container">
     
-    <!-- ЗЕЛЕНАЯ ПЛАШКА (добавлена сюда, структура не изменена) -->
-    <div class="toast-notification">
+    <!-- ЗЕЛЕНАЯ ПЛАШКА -->
+    <div class="toast-notification" id="successToast">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
         Контакт успешно сохранен
     </div>
@@ -236,6 +270,25 @@
     </form>
 
 </div>
+
+<script>
+    function toggleToast() {
+        const toast = document.getElementById('successToast');
+        const btn = document.getElementById('toggleBtn');
+        
+        // Переключаем видимость плашки
+        toast.classList.toggle('hidden');
+        
+        // Переключаем цвет кнопки
+        if (toast.classList.contains('hidden')) {
+            btn.classList.remove('on');
+            btn.classList.add('off');
+        } else {
+            btn.classList.remove('off');
+            btn.classList.add('on');
+        }
+    }
+</script>
 
 </body>
 </html>
